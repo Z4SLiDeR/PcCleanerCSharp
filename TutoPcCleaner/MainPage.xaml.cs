@@ -14,6 +14,8 @@ namespace TutoPcCleaner
         bool chkbErrorsChecked = true;
         bool chkbLogsChecked = true;
 
+        long totalCleanedSize = 0;
+
         public MainPage()
         {
             InitializeComponent();
@@ -94,6 +96,18 @@ namespace TutoPcCleaner
 
             progression.Progress = 1;
             tableRecap.IsVisible = true;
+
+            long totalCleanedSizeInMb = totalCleanedSize / 1000000;
+            if (totalCleanedSizeInMb < 0) totalCleanedSizeInMb = 0;
+
+            if(totalCleanedSizeInMb < 50)
+            {
+                totalSize.Text = "< 10 Mb supprimés.";
+            }
+            else
+            {
+                totalSize.Text = "~" + totalCleanedSizeInMb + " MB supprimés !";
+            }
         }
         /// <summary>
         /// Vider la corbeille
@@ -128,10 +142,29 @@ namespace TutoPcCleaner
             {
                 detailFichiersTemp.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés.";
 
-                //var size = DirSize(new DirectoryInfo(path));
+                var size = DirSize(new DirectoryInfo(path));
+                totalCleanedSize = totalCleanedSize + size;
 
                 ProcessDirectory(path);
             }
+        }
+
+        public static long DirSize(DirectoryInfo dir)
+        {
+            long size = 0;
+            FileInfo[] fis = dir.GetFiles();
+            foreach(FileInfo fi in fis)
+            {
+                size += fi.Length;
+            }
+
+            DirectoryInfo[] dis = dir.GetDirectories();
+            foreach(DirectoryInfo di in dis)
+            {
+                size += DirSize(di);
+            }
+
+            return size;
         }
 
         public int GetFilesCountInFolder(string path)
@@ -182,7 +215,8 @@ namespace TutoPcCleaner
             }
             catch(Exception e)
             {
-                //En cas d'erreurs
+                FileInfo fi = new FileInfo(path);
+                totalCleanedSize -= fi.Length;
             }
         }
         #endregion
@@ -194,6 +228,10 @@ namespace TutoPcCleaner
             if(Directory.Exists(path))
             {
                 detailWinUpdate.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés";
+
+                var size = DirSize(new DirectoryInfo(path));
+                totalCleanedSize = totalCleanedSize + size;
+
                 ProcessDirectory(path);
             }
         }
@@ -205,6 +243,10 @@ namespace TutoPcCleaner
             if (Directory.Exists(path))
             {
                 detailErrors.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés";
+
+                var size = DirSize(new DirectoryInfo(path));
+                totalCleanedSize = totalCleanedSize + size;
+
                 ProcessDirectory(path);
             }
         }
@@ -216,6 +258,10 @@ namespace TutoPcCleaner
             if (Directory.Exists(path))
             {
                 detailLogs.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés";
+
+                var size = DirSize(new DirectoryInfo(path));
+                totalCleanedSize = totalCleanedSize + size;
+
                 ProcessDirectory(path);
             }
         }
