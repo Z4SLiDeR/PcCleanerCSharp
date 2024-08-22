@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.CodeDom;
+using System.Runtime.InteropServices;
 using TutoPcCleaner.Helpers;
 
 namespace TutoPcCleaner
@@ -7,6 +8,8 @@ namespace TutoPcCleaner
     {
 
         Sysinfos Sysinfos = new Sysinfos();
+
+        const string IGNORED = "Ignoré.";
 
         bool chkbFichiersTempChecked = true;
         bool chkbCorbeilleChecked = true;
@@ -66,6 +69,7 @@ namespace TutoPcCleaner
         private void ButtonClean_Clicked(object sender, EventArgs e)
         {
             //dbg.Text = "Infos : " + chkbCorbeilleChecked + " - " + chkbErrorsChecked + " - " + chkbFichiersTempChecked + " - " + chkbWinUpdateChecked + " - " + chkbLogsChecked;
+            ResetValues();
 
             infos.IsVisible = false;
 
@@ -147,6 +151,20 @@ namespace TutoPcCleaner
 
                 ProcessDirectory(path);
             }
+        }
+
+        public void ResetValues()
+        {
+            totalCleanedSize = 0;
+            progression.Progress = 0;
+            tableRecap.IsVisible = false;
+            totalSize.Text = "";
+
+            detailCorbeille.Detail = IGNORED;
+            detailErrors.Detail = IGNORED;
+            detailFichiersTemp.Detail = IGNORED;
+            detailLogs.Detail = IGNORED;
+            detailWinUpdate.Detail = IGNORED;
         }
 
         public static long DirSize(DirectoryInfo dir)
