@@ -6,10 +6,13 @@ namespace TutoPcCleaner
 {
     public partial class MainPage : ContentPage
     {
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        static extern int SHEmptyRecycleBin(IntPtr hWnd, string pszRootPath, uint dwFlags);
 
         Sysinfos Sysinfos = new Sysinfos();
 
         const string IGNORED = "Ignoré.";
+        const int VERSION = 1;
 
         bool chkbFichiersTempChecked = true;
         bool chkbCorbeilleChecked = true;
@@ -18,6 +21,7 @@ namespace TutoPcCleaner
         bool chkbLogsChecked = true;
 
         long totalCleanedSize = 0;
+
 
         public MainPage()
         {
@@ -104,7 +108,7 @@ namespace TutoPcCleaner
             long totalCleanedSizeInMb = totalCleanedSize / 1000000;
             if (totalCleanedSizeInMb < 0) totalCleanedSizeInMb = 0;
 
-            if(totalCleanedSizeInMb < 50)
+            if (totalCleanedSizeInMb < 50)
             {
                 totalSize.Text = "< 10 Mb supprimés.";
             }
@@ -113,6 +117,7 @@ namespace TutoPcCleaner
                 totalSize.Text = "~" + totalCleanedSizeInMb + " MB supprimés !";
             }
         }
+
         /// <summary>
         /// Vider la corbeille
         /// </summary>
@@ -131,10 +136,7 @@ namespace TutoPcCleaner
             }
         }
 
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-        static extern int SHEmptyRecycleBin(IntPtr hWnd, string pszRootPath, uint dwFlags);
 
-        #region clearTemp
         /// <summary>
         /// Videl les fichiers temporaires
         /// </summary>
@@ -142,7 +144,7 @@ namespace TutoPcCleaner
         {
             string path = @"C:\Windows\Temp";
 
-            if(Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 detailFichiersTemp.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés.";
 
@@ -153,97 +155,11 @@ namespace TutoPcCleaner
             }
         }
 
-        public void ResetValues()
-        {
-            totalCleanedSize = 0;
-            progression.Progress = 0;
-            tableRecap.IsVisible = false;
-            totalSize.Text = "";
-
-            detailCorbeille.Detail = IGNORED;
-            detailErrors.Detail = IGNORED;
-            detailFichiersTemp.Detail = IGNORED;
-            detailLogs.Detail = IGNORED;
-            detailWinUpdate.Detail = IGNORED;
-        }
-
-        public static long DirSize(DirectoryInfo dir)
-        {
-            long size = 0;
-            FileInfo[] fis = dir.GetFiles();
-            foreach(FileInfo fi in fis)
-            {
-                size += fi.Length;
-            }
-
-            DirectoryInfo[] dis = dir.GetDirectories();
-            foreach(DirectoryInfo di in dis)
-            {
-                size += DirSize(di);
-            }
-
-            return size;
-        }
-
-        public int GetFilesCountInFolder(string path)
-        {
-            try
-            {
-                return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Count();
-            }
-            catch(UnauthorizedAccessException ex)
-            {
-                return -1;
-            }
-            catch(Exception ex)
-            {
-                return -1;
-            }
-        }
-
-        public void ProcessDirectory(string targetDirectory)
-        {
-            string[] fileEntries = Directory.GetFiles(targetDirectory);
-            foreach (string fileName in fileEntries) ProcessFile(fileName);
-
-            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
-            foreach(string subdirectory in subdirectoryEntries) ProcessDirectory(subdirectory);
-        }
-
-        public void ProcessFile (string path)
-        {
-            try
-            {
-                if (path.Contains("\\Temp"))
-                {
-                    File.Delete(path);
-                }
-                else if (path.Contains("\\SoftwareDistribution"))
-                {
-                    File.Delete(path);
-                }
-                else if (path.Contains("\\winevt\\Logs"))
-                {
-                    File.Delete(path);
-                }
-                else if (path.Contains("\\Windows\\WER"))
-                {
-                    File.Delete(path);
-                }
-            }
-            catch(Exception e)
-            {
-                FileInfo fi = new FileInfo(path);
-                totalCleanedSize -= fi.Length;
-            }
-        }
-        #endregion
-
         public void ClearWinUpdate()
         {
             string path = @"C:\Windows\SoftwareDistribution\Download";
 
-            if(Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 detailWinUpdate.Detail = GetFilesCountInFolder(path) + " Fichiers supprimés";
 
@@ -313,6 +229,120 @@ namespace TutoPcCleaner
             chkbErrorsChecked = e.Value;
             Preferences.Set("chkbErrorsChecked", chkbErrorsChecked);
         }
+
+        public void ResetValues()
+        {
+            totalCleanedSize = 0;
+            progression.Progress = 0;
+            tableRecap.IsVisible = false;
+            totalSize.Text = "";
+
+            detailCorbeille.Detail = IGNORED;
+            detailErrors.Detail = IGNORED;
+            detailFichiersTemp.Detail = IGNORED;
+            detailLogs.Detail = IGNORED;
+            detailWinUpdate.Detail = IGNORED;
+        }
+
+        public static long DirSize(DirectoryInfo dir)
+        {
+            long size = 0;
+            FileInfo[] fis = dir.GetFiles();
+            foreach (FileInfo fi in fis)
+            {
+                size += fi.Length;
+            }
+
+            DirectoryInfo[] dis = dir.GetDirectories();
+            foreach (DirectoryInfo di in dis)
+            {
+                size += DirSize(di);
+            }
+
+            return size;
+        }
+
+        public int GetFilesCountInFolder(string path)
+        {
+            try
+            {
+                return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Count();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        public void ProcessDirectory(string targetDirectory)
+        {
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries) ProcessFile(fileName);
+
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries) ProcessDirectory(subdirectory);
+        }
+
+        public void ProcessFile(string path)
+        {
+            try
+            {
+                if (path.Contains("\\Temp"))
+                {
+                    File.Delete(path);
+                }
+                else if (path.Contains("\\SoftwareDistribution"))
+                {
+                    File.Delete(path);
+                }
+                else if (path.Contains("\\winevt\\Logs"))
+                {
+                    File.Delete(path);
+                }
+                else if (path.Contains("\\Windows\\WER"))
+                {
+                    File.Delete(path);
+                }
+            }
+            catch (Exception e)
+            {
+                FileInfo fi = new FileInfo(path);
+                totalCleanedSize -= fi.Length;
+            }
+        }
+
+        public async void CheckVersion()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string url = "https://www.anthony-cardinale.fr/_public/_dev.v2.txt";
+                    string s = await client.GetStringAsync(url);
+                    int lastVersion = int.Parse(s);
+
+                    if (lastVersion != VERSION)
+                    {
+                        ShowNotif();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Pas d'internet
+            }
+
+        }
+
+        public void ShowNotif() 
+        {
+
+        }
+
     }
 
 }
