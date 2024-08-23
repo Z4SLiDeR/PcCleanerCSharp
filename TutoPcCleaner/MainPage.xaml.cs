@@ -1,6 +1,6 @@
-﻿using System.CodeDom;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using TutoPcCleaner.Helpers;
+using Plugin.LocalNotification;
 
 namespace TutoPcCleaner
 {
@@ -28,6 +28,7 @@ namespace TutoPcCleaner
             InitializeComponent();
             ShowSystemInfos();
             InitChkbStates();
+            CheckVersion();
         }
 
         private async void InfoButton_Clicked(object sender, EventArgs e)
@@ -321,11 +322,11 @@ namespace TutoPcCleaner
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string url = "https://www.anthony-cardinale.fr/_public/_dev.v2.txt";
+                    string url = "https://www.anthony-cardinale.fr/_public/_dev/v2";
                     string s = await client.GetStringAsync(url);
                     int lastVersion = int.Parse(s);
 
-                    if (lastVersion != VERSION)
+                    if (lastVersion > VERSION)
                     {
                         ShowNotif();
                     }
@@ -340,7 +341,19 @@ namespace TutoPcCleaner
 
         public void ShowNotif() 
         {
-
+            var notif = new NotificationRequest
+            {
+                NotificationId = 1,
+                Title = "Mise à jour disponible !",
+                Subtitle = "Obtenez la dernière version de PC Cleaner",
+                Description = "Téléchargez dès à présent la dernière mise à jour.",
+                BadgeNumber = 1,
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = DateTime.Now.AddSeconds(1),
+                }
+            };
+            LocalNotificationCenter.Current.Show(notif);
         }
 
     }
