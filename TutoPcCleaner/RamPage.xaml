@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pr="clr-namespace:MPowerKit.ProgressRing;assembly=MPowerKit.ProgressRing"
              x:Class="TutoPcCleaner.RamPage"
              Title=""
              BackgroundColor="White">
@@ -74,6 +75,42 @@
                                 <StackLayout>
                                     <Label Text="Optimiser la RAM" FontSize="Large" FontAttributes="Bold" x:Name="mainTitle" TextColor="Black" Margin="0,0,0,10"/>
                                     <BoxView HeightRequest="1" BackgroundColor="Black" Margin="0,20,0,5"/>
+
+                                    <Label Text="Utilisation de la RAM" FontSize="Medium" FontAttributes="Bold" x:Name="useTxt" TextColor="Black" Margin="0,5,0,10" HorizontalTextAlignment="Center"/>
+
+                                    <Grid HorizontalOptions="FillAndExpand">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <pr:ProgressRing
+                                            x:Name="graph"
+                                            HeightRequest="200"
+                                            Progress="0"
+                                            IsIndeterminate="False"
+                                            Smooth="True"
+                                            WidthRequest="200"
+                                            StrokeLineCap="Square"
+                                            Color="DodgerBlue"
+                                            Thickness="20" />
+
+                                        <Label x:Name="ramUsageTxt" Text="%" Margin="0,80,0,0" TextColor="Black" FontSize="Large" HorizontalTextAlignment="Center"/>
+
+                                        <TableView Intent="Menu" RowHeight="44" Grid.Column="1" Margin="0,-10,0,0">
+                                            <TableRoot>
+                                                <TableSection>
+                                                    <TextCell Text="Capacité totale :" Detail="x Mb" x:Name="cellTotal" DetailColor="Black" TextColor="Black"/>
+                                                    <TextCell Text="RAM utilisée :" Detail="x Mb" x:Name="cellUsed" DetailColor="Black" TextColor="Black"/>
+                                                    <TextCell Text="Ram libre :" Detail="x Mb" x:Name="cellFree" DetailColor="Black" TextColor="Black"/>
+                                                </TableSection>
+                                            </TableRoot>
+                                        </TableView>
+                                        
+                                    </Grid>
+
+                                    <Button Text="Optimiser la RAM" Background="DodgerBlue" TextColor="White" Margin="0,100,0,0" Clicked="ButtonCleanRAM_Clicked"/>
+                                    <Label Margin="0,10,0,0" Text="RAM optimisée !" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" x:Name="ramCleaned" IsVisible="False"/>
                                 </StackLayout>
                             </ScrollView>
                         </Frame>

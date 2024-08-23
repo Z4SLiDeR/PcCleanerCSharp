@@ -41,4 +41,9 @@ public partial class RamPage : ContentPage
     {
         await Navigation.PushAsync(new OptionPage());
     }
+
+    private void ButtonCleanRAM_Clicked(object sender, EventArgs e)
+    {
+        ramCleaned.IsVisible = true;
+    }
 }
