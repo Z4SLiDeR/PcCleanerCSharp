@@ -39,19 +39,19 @@
                     <Label Text="Nettoyage" FontSize="12" Margin="0, -15, 0, 10" HorizontalTextAlignment="Center" FontAttributes="Bold" TextDecorations="Underline"/>
 
                     <!--RAM-->
-                    <ImageButton Source="ram.png" WidthRequest="50" BackgroundColor="#666"/>
+                    <ImageButton Source="ram.png" WidthRequest="50" BackgroundColor="#666" Clicked="ImageButton_ram_Clicked"/>
                     <Label Text="RAM" FontSize="12" Margin="0, -15, 0, 10" HorizontalTextAlignment="Center"/>
 
                     <!--Outils-->
-                    <ImageButton Source="tools.png" WidthRequest="50" BackgroundColor="#666"/>
+                    <ImageButton Source="tools.png" WidthRequest="50" BackgroundColor="#666" Clicked="ImageButton_tools_Clicked"/>
                     <Label Text="Outils" FontSize="12" Margin="0, -15, 0, 10" HorizontalTextAlignment="Center"/>
 
                     <!--Options-->
-                    <ImageButton Source="options.png" WidthRequest="50" BackgroundColor="#666"/>
+                    <ImageButton Source="options.png" WidthRequest="50" BackgroundColor="#666" Clicked="ImageButton_option_Clicked"/>
                     <Label Text="Options" FontSize="12" Margin="0, -15, 0, 10" HorizontalTextAlignment="Center"/>
 
                     <!--MAJ-->
-                    <ImageButton Source="update.png" WidthRequest="50" BackgroundColor="#666"/>
+                    <ImageButton Source="update.png" WidthRequest="50" BackgroundColor="#666" Clicked="ImageButton_maj_Clicked"/>
                     <Label Text="MAJ" FontSize="12" Margin="0, -15, 0, 10" HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>
             </Frame>

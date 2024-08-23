@@ -356,6 +356,25 @@ namespace TutoPcCleaner
             LocalNotificationCenter.Current.Show(notif);
         }
 
+        private async void ImageButton_option_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new OptionPage());
+        }
+
+        private async void ImageButton_ram_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RamPage());
+        }
+
+        private async void ImageButton_tools_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ToolsPage());
+        }
+
+        private async void ImageButton_maj_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new UpdatePage());
+        }
     }
 
 }
