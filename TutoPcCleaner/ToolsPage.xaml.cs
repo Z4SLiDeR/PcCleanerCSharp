@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using TutoPcCleaner.Helpers;
 
 namespace TutoPcCleaner;
@@ -39,5 +40,22 @@ public partial class ToolsPage : ContentPage
     private async void ImageButton_options_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new OptionPage());
+    }
+
+    private void ButtonRestaurePoint_Clicked(object sender, EventArgs e)
+    {
+        dynamic restPoint = Interaction.GetObject("winmgmts:\\\\.\\root\\default:Systemrestore");
+
+        if (restPoint != null)
+        {
+            if (restPoint.CreateRestonePoint("PC Cleaner restore point", 0, 100) == 0) 
+            {
+                restaureTxt.Text = "Point de restauration créé !";
+            }
+            else
+            {
+                restaureTxt.Text = "Echec lors de la création du point de restauration !";
+            }
+        }
     }
 }
