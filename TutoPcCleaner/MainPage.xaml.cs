@@ -334,29 +334,48 @@ namespace TutoPcCleaner
                     }
                 }
             }
+            catch (HttpRequestException httpEx)
+            {
+                // Gérer les erreurs liées à la requête HTTP
+                Console.WriteLine($"Erreur de requête HTTP: {httpEx.Message}");
+            }
+            catch (FormatException formatEx)
+            {
+                // Gérer les erreurs de formatage, par exemple si la réponse n'est pas un entier
+                Console.WriteLine($"Erreur de formatage: {formatEx.Message}");
+            }
             catch (Exception ex)
             {
-                //Pas d'internet
+                // Gérer toutes les autres exceptions
+                Console.WriteLine($"Une erreur s'est produite: {ex.Message}");
             }
-
         }
 
-        public void ShowNotif() 
+        public void ShowNotif()
         {
-            var notif = new NotificationRequest
+            try
             {
-                NotificationId = 1,
-                Title = "Mise à jour disponible !",
-                Subtitle = "Obtenez la dernière version de PC Cleaner",
-                Description = "Téléchargez dès à présent la dernière mise à jour.",
-                BadgeNumber = 1,
-                Schedule = new NotificationRequestSchedule
+                var notif = new NotificationRequest
                 {
-                    NotifyTime = DateTime.Now.AddSeconds(1),
-                }
-            };
-            LocalNotificationCenter.Current.Show(notif);
+                    NotificationId = 1,
+                    Title = "Mise à jour disponible !",
+                    Subtitle = "Obtenez la dernière version de PC Cleaner",
+                    Description = "Téléchargez dès à présent la dernière mise à jour.",
+                    BadgeNumber = 1,
+                    Schedule = new NotificationRequestSchedule
+                    {
+                        NotifyTime = DateTime.Now.AddSeconds(1),
+                    }
+                };
+                LocalNotificationCenter.Current.Show(notif);
+            }
+            catch (Exception ex)
+            {
+                // Gérer l'exception ici
+                Console.WriteLine(ex.Message);
+            }
         }
+
 
         private async void ImageButton_option_Clicked(object sender, EventArgs e)
         {
