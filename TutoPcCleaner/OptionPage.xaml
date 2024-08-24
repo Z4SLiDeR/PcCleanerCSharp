@@ -74,6 +74,41 @@
                                 <StackLayout>
                                     <Label Text="Paramètres" FontSize="Large" FontAttributes="Bold" x:Name="mainTitle" TextColor="Black" Margin="0,0,0,10"/>
                                     <BoxView HeightRequest="1" BackgroundColor="Black" Margin="0,20,0,5"/>
+
+                                    <Label Text="Site web :" TextColor="Black" FontAttributes="Bold"/>
+                                    <Label Text="Site web PC Cleaner" TextColor="DodgerBlue" TextDecorations="Underline" Margin="10,0,0,0">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://anthony-cardinale.fr/tools/pccleaner?from=pccleaner"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                    <Label Text="Réseaux sociaux :" TextColor="Black" FontAttributes="Bold"/>
+                                    <Label Text="Facebook" TextColor="DodgerBlue" TextDecorations="Underline" Margin="10,0,0,0">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://anthony-cardinale.fr/tools/pccleaner?from=pccleaner"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                    <Label Text="X (Twitter)" TextColor="DodgerBlue" TextDecorations="Underline" Margin="10,0,0,0">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://anthony-cardinale.fr/tools/pccleaner?from=pccleaner"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                    <Label Text="Youtube" TextColor="DodgerBlue" TextDecorations="Underline" Margin="10,0,0,0">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://anthony-cardinale.fr/tools/pccleaner?from=pccleaner"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    
+                                    
+                                    <!-- Paramètres -->
+                                    <Label Text="Réglages :" TextColor="Black" FontAttributes="Bold" Margin="0,10,0,0"/>
+
+                                    <HorizontalStackLayout>
+                                        <CheckBox Color="DodgerBlue" IsChecked="True" x:Name="paramSearchMaj" CheckedChanged="paramSearchMaj_CheckedChanged"/>
+                                        <Label Text="Afficher une notification en cas de mise à jour disponible." TextColor="Black" Margin="0,11,0,0"/>
+                                    </HorizontalStackLayout>
                                 </StackLayout>
                             </ScrollView>
                         </Frame>

@@ -322,11 +322,13 @@ namespace TutoPcCleaner
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string url = "https://www.anthony-cardinale.fr/_public/_dev/v2";
+                    string url = "https://www.anthony-cardinale.fr/_public/_dev/v1";
                     string s = await client.GetStringAsync(url);
                     int lastVersion = int.Parse(s);
 
-                    if (lastVersion > VERSION)
+                    bool paramShowNotif = Preferences.Get("paramSearchMaj", true);
+
+                    if (lastVersion > VERSION && paramShowNotif)
                     {
                         ShowNotif();
                     }
